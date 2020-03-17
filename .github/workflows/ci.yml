@@ -1,0 +1,23 @@
+#introduce  https://help.github.com/en/articles/configuring-a-workflow
+#syntax doc https://help.github.com/en/articles/workflow-syntax-for-github-actions
+name: ci
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build_and_depoly:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        node-version: 10.x 
+
+    - name: Build and Depoly
+      uses: JamesIves/github-pages-deploy-action@master
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist
+        BUILD_SCRIPT: npm install && npm run build
