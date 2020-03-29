@@ -8,8 +8,7 @@ function App() {
     type: 'success', // success|error|warning|loading
     message: `现在是${new Date()}`,
     async control({ goto, delay, set }) {
-      await goto('in')
-      for (let i=0; i<50; i++) {
+      for (let i=0; i<100; i++) {
         await goto('in')
         await delay(500)
         await goto('out')
@@ -18,7 +17,6 @@ function App() {
           message: `现在是${new Date()}`,
         })
       }
-      await goto('out')
       await goto('exit')
     },
   })
@@ -26,9 +24,10 @@ function App() {
   async function doToast() {
     const a = Toast.create(`${new Date()}`)
 
-      await a.goto('in')
-      await a.goto('out')
-      await a.goto('exit')
+    await a.goto('in')
+    await a.delay(5000)
+    await a.goto('out')
+    await a.goto('exit')
   }
 
   return (

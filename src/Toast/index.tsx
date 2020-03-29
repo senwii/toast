@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 
+import { useReactiveRef, useTimeoutRef } from './hooks'
+
 import './interface'
 
 import './index.less'
@@ -21,17 +23,18 @@ function Toast(options: ToastProp) {
   const [message, setMessage] = useState(options.message)
   const [duration, setDuration] = useState(options.duration)
   const [cssClass, setCssClass] = useState(options.cssClass)
-  const timerRef = useRef(0)
+  const timerRef = useTimeoutRef(undefined as unknown as NodeJS.Timeout)
   const rootRef = useRef(null)
   const referRef = useRef(Promise.resolve())
   const sustainRef = useRef(options.sustain)
   const animeDurRef = useRef(options.animeDuration)
   const timestampRef = useRef(new Date().getTime())
-  const [curprogress, setCurprogress] = useState('sleep')
+  const [initProgress, setInitProgress] = useState(Symbol('sleep'))
+  const curprogress = useReactiveRef(initProgress)
 
-  !options.context.goto && (options.context.goto = goto)
-  !options.context.delay && (options.context.delay = delay)
-  !options.context.set && (options.context.set = set)
+  options.context.goto = goto
+  options.context.delay = delay
+  options.context.set = set
   
   useEffect(() => {
     (async () => {
@@ -41,7 +44,7 @@ function Toast(options: ToastProp) {
         await goto('out')
         await goto('exit')
       } else {
-        options.control({ goto, delay, set })
+        options.control(options.context)
       }
     })()
   }, [])
@@ -52,7 +55,7 @@ function Toast(options: ToastProp) {
    * @description 跳转到流程
    */
   function goto(progress:string):Promise<any> {
-    referRef.current = referRef.current.then(() =>  transit(progress))
+    referRef.current = referRef.current.then(() => transit(progress))
     return referRef.current
   }
 
@@ -64,10 +67,9 @@ function Toast(options: ToastProp) {
   function delay(millisecond:number):Promise<any> {
     referRef.current = referRef.current.then(() => new Promise(resolve => {
       if (millisecond >= 0 && millisecond < Infinity) {
-        const tid = setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           resolve()
         }, millisecond)
-        timerRef.current = tid as unknown as number
       } else if (millisecond < 0) {
         resolve()
       }
@@ -85,35 +87,34 @@ function Toast(options: ToastProp) {
   async function transit(progress:string, option?:DefaultToastProp):Promise<any> {
     const currenttime = new Date().getTime()
 
-    const dt = sustainRef.current - (currenttime - timestampRef.current)
-
-    await new Promise(resolve => {
-      if (dt >= 0) {
-        const tid = setTimeout(() => {
+    if (curprogress.current !== initProgress) {
+      const dt = sustainRef.current - (currenttime - timestampRef.current)
+  
+      await new Promise(resolve => {
+        if (dt >= 0) {
+          timerRef.current = setTimeout(() => {
+            resolve()
+          }, dt)
+        } else {
           resolve()
-        }, dt) as unknown as number
-        timerRef.current = tid
-      } else {
-        resolve()
-      }
-    })
+        }
+      })
+    }
 
     option && set(option)
 
     return new Promise(resolve => {
-      if (curprogress === progress) {
+      if (curprogress.current === progress) {
         resolve()
         return
       }
 
-      clearTimeout(timerRef.current)
-
       // 防止动画还未结束
       setTimeout(() => {
-        setCurprogress(progress)
+        curprogress.current = progress
         timestampRef.current = new Date().getTime()
-  
-        const tid = setTimeout(() => {
+
+        timerRef.current = setTimeout(() => {
           resolve()
           if (progress === 'exit') {
             const current = rootRef.current as unknown as  HTMLElement
@@ -122,8 +123,6 @@ function Toast(options: ToastProp) {
             parent && ancestor && ancestor.removeChild(parent)
           }
         }, animeDurRef.current)
-  
-        timerRef.current = tid as unknown as number
       }, 16)
     })
   }
@@ -200,7 +199,7 @@ function Toast(options: ToastProp) {
   }
 
   return (
-    <div className={`toast-root ${type} ${curprogress} ${cssClass}`} style={{ animationDuration: `${animeDurRef.current}ms` }} ref={rootRef}>
+    <div className={`toast-root ${type} ${String(curprogress.current)} ${cssClass}`} style={{ animationDuration: `${animeDurRef.current}ms` }} ref={rootRef}>
       <div className="main-content" onAnimationStart={saveAnimateValue} onAnimationEnd={saveAnimateValue}>
         <div className="icon">&zwj;</div>
         {
