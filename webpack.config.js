@@ -98,8 +98,15 @@ module.exports = {
       {
 				test: /\.(less|css)$/,
 				use: [
-					MiniCssExtractPlugin.loader,
-					'css-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[local]___[hash:base64:5]',
+              },
+            },
+          },
 					'postcss-loader',
 					'less-loader',
 				],

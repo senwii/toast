@@ -5,7 +5,7 @@ import { useReactiveRef, useTimeoutRef } from './hooks'
 
 import './interface'
 
-import './index.less'
+const style = require('./index.less')
 
 const defaultOption:ToastProp = {
   type: 'success',
@@ -199,11 +199,11 @@ function Toast(options: ToastProp) {
   }
 
   return (
-    <div className={`toast-root ${type} ${String(curprogress.current)} ${cssClass}`} style={{ animationDuration: `${animeDurRef.current}ms` }} ref={rootRef}>
-      <div className="main-content" onAnimationStart={saveAnimateValue} onAnimationEnd={saveAnimateValue}>
-        <div className="icon">&zwj;</div>
+    <div className={`toast-root ${style['toast-root']} ${type} ${style[type]} ${String(curprogress.current)} ${style[String(curprogress.current)]} ${cssClass}`} style={{ animationDuration: `${animeDurRef.current}ms` }} ref={rootRef}>
+      <div className={`main-content ${style['main-content']}`} onAnimationStart={saveAnimateValue} onAnimationEnd={saveAnimateValue}>
+        <div className={`icon ${style['icon']}`}>&zwj;</div>
         {
-          message && <div className="content">{message}</div>
+          message && <div className={`content ${style['content']}`}>{message}</div>
         }
       </div>
     </div>
@@ -233,7 +233,7 @@ const ToastWrapper:ToastWrapper = function(options: string|DefaultToastProp) {
   let prop:ToastProp = createParam(options)
 
   if (!document.body.contains(container)) {
-    container.className = 'toast-group-container'
+    container.className = `toast-group-container ${style['toast-group-container']}`
     document.body.append(container)
   }
 
