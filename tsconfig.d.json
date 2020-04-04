@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNEXT",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outFile": "./lib/index.d.ts"
+  }
+}

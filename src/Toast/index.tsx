@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
+const Symbol = require('es6-symbol')
 
 import { useReactiveRef, useTimeoutRef } from './hooks'
 

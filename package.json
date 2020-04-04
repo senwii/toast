@@ -1,21 +1,35 @@
 {
   "name": "@senwii/toast",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A React Toast UI Component",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "NODE_ENV=develop webpack-dev-server",
-    "build:develop": "NODE_ENV=develop webpack",
-    "build": "NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack  --config=webpack.lib.config.js && tsc --build tsconfig.d.json",
+    "build:page": "NODE_ENV=production webpack"
   },
   "author": "senwii",
   "homepage": "https://blog.senwii.ink/hello",
-  "license": "ISC",
+  "license": "MIT",
+  "keywords": [
+    "component",
+    "frontend",
+    "react",
+    "react-component",
+    "ui",
+    "toast"
+  ],
   "dependencies": {
-    "@loadable/component": "^5.10.3",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "es6-symbol": "^3.1.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -36,7 +50,10 @@
     "less-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.8.0",
     "postcss-loader": "^3.0.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "source-map-loader": "^0.2.4",
+    "style-loader": "^1.1.3",
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.2",
     "webpack": "^4.39.3",
