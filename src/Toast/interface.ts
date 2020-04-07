@@ -7,6 +7,7 @@ interface ToastProp {
     animeDuration: number;
     control: null|undefined|Control;
     context: Context;
+    attachment: string|HTMLElement;
 }
   
 interface DefaultToastProp {
@@ -17,6 +18,7 @@ interface DefaultToastProp {
     sustain?: number;
     animeDuration?: number;
     control?: null|undefined|Control;
+    attachment?: string|HTMLElement;
     [propName: string]: any;
 }
   

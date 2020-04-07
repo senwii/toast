@@ -17,6 +17,7 @@ const defaultOption:ToastProp = {
   animeDuration: 250,
   control: null,
   context: {} as Context,
+  attachment: document.body,
 }
 
 function Toast(options: ToastProp) {
@@ -231,21 +232,36 @@ function createParam(...options: Array<string|DefaultToastProp>):ToastProp {
 const container:HTMLDivElement = document.createElement('div')
 
 const ToastWrapper:ToastWrapper = function(options: string|DefaultToastProp) {
-  let prop:ToastProp = createParam(options)
+  const prop:ToastProp = createParam(options)
+  const attachment = prop.attachment instanceof HTMLElement ? prop.attachment : document.querySelector(prop.attachment)
 
-  if (!document.body.contains(container)) {
-    container.className = `toast-group-container ${style['toast-group-container']}`
-    document.body.append(container)
+  if (!attachment) {
+    throw '[attachment] param refers to none exist HTMLElement.'
   }
 
-  const div:HTMLDivElement = document.createElement('div')
-  container.append(div)
+  // 自定义了挂载元素
+  if (attachment !== document.body) {
+    const div:HTMLDivElement = document.createElement('div')
+    attachment.append(div)
 
-  ReactDOM.render(<Toast {...prop} />, div)
+    ReactDOM.render(<Toast {...prop} />, div)
+
+  // 默认挂载在body上
+  } else {
+    if (!attachment.contains(container)) {
+      container.className = `toast-group-container ${style['toast-group-container']}`
+      attachment.append(container)
+    }
+
+    const div:HTMLDivElement = document.createElement('div')
+    container.append(div)
+
+    ReactDOM.render(<Toast {...prop} />, div)
+  }
 }
 
 ToastWrapper.create = (options: string|DefaultToastProp):Context => {
-  let prop:ToastProp = createParam(options, {
+  const prop:ToastProp = createParam(options, {
     control: () => {},
   })
 
