@@ -200,7 +200,7 @@ function Toast(options: ToastProp) {
   }
 
   return (
-    <div className={`toast-root ${style['toast-root']} ${type} ${style[type]} ${String(curprogress.current)} ${style[String(curprogress.current)]} ${cssClass}`} style={{ animationDuration: `${animeDurRef.current}ms` }} ref={rootRef}>
+    <div className={`toast-root ${ curprogress.current !== initProgress ? style['initialized'] : ''} ${style['toast-root']} ${type} ${style[type]} ${String(curprogress.current)} ${style[String(curprogress.current)]} ${cssClass}`} style={{ animationDuration: `${animeDurRef.current}ms` }} ref={rootRef}>
       <div className={`main-content ${style['main-content']}`} onAnimationStart={saveAnimateValue} onAnimationEnd={saveAnimateValue}>
         <div className={`icon ${style['icon']}`}>&zwj;</div>
         {

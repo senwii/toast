@@ -6,12 +6,16 @@
 }
 
 .toast-root {
-    display: table;
+    display: none;
     position: relative;
     left: 50%;
     margin-bottom: 10px;
     table-layout: fixed;
     transform: translateX(-50%);
+
+    &.initialized {
+        display: table;
+    }
 
     .main-content {
         position: relative;
