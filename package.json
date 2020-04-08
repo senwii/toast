@@ -1,6 +1,6 @@
 {
   "name": "@senwii/toast",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A React Toast UI Component",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
