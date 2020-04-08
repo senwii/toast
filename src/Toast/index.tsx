@@ -119,10 +119,14 @@ function Toast(options: ToastProp) {
         timerRef.current = setTimeout(() => {
           resolve()
           if (progress === 'exit') {
-            const current = rootRef.current as unknown as  HTMLElement
-            const parent:null|Node = current.parentNode
-            const ancestor:null|Node = parent && parent.parentNode
-            parent && ancestor && ancestor.removeChild(parent)
+            const current = rootRef.current as unknown as Element
+            const parent:null|Element = current.parentElement
+            const linebreak:null|undefined|Element = parent?.nextElementSibling
+            const grand:null|undefined|Element = parent?.parentElement
+            const ancestor:null|undefined|Element = grand?.parentElement
+            parent && grand?.removeChild(parent)
+            linebreak && linebreak.className === style['line-break'] && grand?.removeChild(linebreak)
+            grand?.children.length===0 && ancestor?.removeChild(grand)
           }
         }, animeDurRef.current)
       }, 16)
@@ -229,8 +233,6 @@ function createParam(...options: Array<string|DefaultToastProp>):ToastProp {
   return prop
 }
 
-const container:HTMLDivElement = document.createElement('div')
-
 const ToastWrapper:ToastWrapper = function(options: string|DefaultToastProp) {
   const prop:ToastProp = createParam(options)
   const attachment = prop.attachment instanceof HTMLElement ? prop.attachment : document.querySelector(prop.attachment)
@@ -239,25 +241,25 @@ const ToastWrapper:ToastWrapper = function(options: string|DefaultToastProp) {
     throw '[attachment] param refers to none exist HTMLElement.'
   }
 
-  // 自定义了挂载元素
-  if (attachment !== document.body) {
-    const div:HTMLDivElement = document.createElement('div')
-    attachment.append(div)
+  let container = [...attachment.children as unknown as Array<HTMLElement>].find(el => el.className.indexOf(`${style['toast-group-container']}`) !== -1)
 
-    ReactDOM.render(<Toast {...prop} />, div)
-
-  // 默认挂载在body上
-  } else {
-    if (!attachment.contains(container)) {
-      container.className = `toast-group-container ${style['toast-group-container']}`
-      attachment.append(container)
-    }
-
-    const div:HTMLDivElement = document.createElement('div')
-    container.append(div)
-
-    ReactDOM.render(<Toast {...prop} />, div)
+  if (!container) {
+    container = document.createElement('div')
+    container.className = `toast-group-container ${style['toast-group-container']}`
+    attachment.append(container)
   }
+
+  // render元素
+  const div:HTMLDivElement = document.createElement('div')
+  div.className = style['instance-container']
+  container.append(div)
+
+  // 换行
+  const linebreak:HTMLDivElement = document.createElement('div')
+  linebreak.className = style['line-break']
+  container.append(linebreak)
+
+  ReactDOM.render(<Toast {...prop} />, div)
 }
 
 ToastWrapper.create = (options: string|DefaultToastProp):Context => {

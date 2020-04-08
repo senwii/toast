@@ -1,29 +1,44 @@
 .toast-group-container {
-    width: 0;
+    width: 100%;
+    height: 0;
+    display: flex;
     position: absolute;
     top: 0;
-    left: 50%;
+    left: 0;
+    flex-wrap: wrap;
+    overflow: visible;
+}
+
+.instance-container {
+    min-width: 52px;
+    max-width: 75%;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.line-break {
+    flex: 1 0 100%;
+    line-height: 0;
 }
 
 .toast-root {
+    max-width: 100%;
     display: none;
     position: relative;
-    left: 50%;
-    margin-bottom: 10px;
-    table-layout: fixed;
-    transform: translateX(-50%);
+    margin-top: 10px;
 
     &.initialized {
-        display: table;
+        display: block;
     }
 
     .main-content {
+        display: flex;
         position: relative;
         padding: 12px 16px;
         background-color: #fff;
         border-radius: 6px;
         box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.1);
-        top: 0;
+        top: -30px;
         opacity: 0;
         visibility: hidden;
         animation-fill-mode: forwards;
@@ -33,7 +48,6 @@
 
         .icon {
             min-width: 20px;
-            display: table-cell;
             background: no-repeat center/contain content-box;
             user-select: none;
     
@@ -43,8 +57,6 @@
         }
     
         .content {
-            max-width: 70vw;
-            display: table-cell;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -79,7 +91,7 @@
 
 @keyframes animeIn {
     to {
-        top: 30px;
+        top: 0px;
         opacity: 1;
         visibility: visible;
     }
@@ -87,7 +99,7 @@
 
 @keyframes animeOut {
     to {
-        top: 0;
+        top: -30px;
         opacity: 0;
         visibility: hidden;
     }
