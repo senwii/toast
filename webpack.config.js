@@ -96,7 +96,18 @@ module.exports = {
           loader: 'source-map-loader',
       },
       {
-				test: /\.(less|css)$/,
+        test: /\.(less|css)$/,
+        exclude: /Toast/,
+				use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+					'postcss-loader',
+					'less-loader',
+				],
+      },
+      {
+        test: /\.(less|css)$/,
+        include: /Toast/,
 				use: [
           MiniCssExtractPlugin.loader,
           {

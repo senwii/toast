@@ -1,0 +1,29 @@
+.hover-flash {
+    animation: hover-flash infinite 1s ease-in-out;
+}
+.click-flash {
+    animation: click-flash infinite 1s ease-in-out;
+}
+.out-line {
+    outline: 1px solid;
+}
+a {
+    color: inherit;
+}
+
+@keyframes hover-flash {
+    from, to {
+        background-color: transparent;
+    }
+    50% {
+        background-color: greenyellow;
+    }
+}
+@keyframes click-flash {
+    from, to {
+        background-color: transparent;
+    }
+    50% {
+        background-color: yellow;
+    }
+}
