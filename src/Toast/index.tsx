@@ -245,7 +245,7 @@ const ToastWrapper:ToastWrapper = function(options: string|DefaultToastProp) {
 
   if (!container) {
     container = document.createElement('div')
-    container.className = `toast-group-container ${style['toast-group-container']}`
+    container.className = `toast-group-container ${style['toast-group-container']} ${attachment === document.body ? style['fixed-layout'] : style['absolute-layout']}`
     attachment.append(container)
   }
 
