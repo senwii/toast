@@ -54,7 +54,7 @@ module.exports = {
     path: `${appDirName}/dist`,
     filename: 'entry.[contenthash].js',
     chunkFilename: '[name].[contenthash].js',
-    publicPath: IS_PRODUCTION ? '/toast' : '/',
+    publicPath: './',
   },
   resolve: {
     alias: {
