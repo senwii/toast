@@ -45,9 +45,9 @@ export default function CodeField(props:CodeFieldProp) {
     const execStr = doc.getValue()
     let container
     if (props.sandboxId) {
-      container = presentZoneRef.current.querySelector('.toast-group-container')
+      container = [...presentZoneRef.current.children as unknown as Array<HTMLElement>].find(el => el.className.indexOf('toast-group-container') !== -1)
     } else if (props.attachment) {
-      container = props.attachment.querySelector('.toast-group-container')
+      container = [...props.attachment.children as unknown as Array<HTMLElement>].find(el => el.className.indexOf('toast-group-container') !== -1)
     }
     container?.remove()
     try {

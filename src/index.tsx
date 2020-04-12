@@ -24,8 +24,9 @@ function App() {
         'Already support 4 types: success|error|warning|loading.',
         'You can also override or add your own type by style.',
         'For example: Shrink',
-        'Another exmaple: tremble',
-        'The minimal use is Toast(\'message\')',
+        'Another example: tremble',
+        'import Toast from \'@senwii/toast\';',
+        'Toast(\'message\');',
         length,
       }
       for(let i=0;;i++) {
@@ -320,18 +321,7 @@ const toast = Toast.create({
   message: 'A new type: Search',
   attachment: '#p-2',
 })
-toast.goto('in').then(async () => {
-  await toast.delay(2000)
-  await toast.goto('out')
-  toast.set({
-    type: 'success',
-    message: 'Search successfully!',
-  })
-  await toast.goto('in')
-  await toast.delay(2000)
-  await toast.goto('out')
-  await toast.goto('exit')
-})
+toast.goto('in')
 
 // .css
 // Add these styles
