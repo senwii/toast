@@ -27,10 +27,6 @@ const plugins = [
       to: 'assets/',
       flatten: true,
     },
-    {
-      from: 'public/404.html',
-      flatten: true,
-    },
   ]),
 ]
 
